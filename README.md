@@ -27,14 +27,10 @@ Suppose you have a folder Pos1 with brightfield images save as individual tiffs.
 
 This will compute correlation coefficient between two images and output correlation map as 32-bit tif image `Pos1_brightfield_instabilities.tif`.
 
-positional arguments:
-
-  folder
-
 optional arguments:
 
   -h, --help   show this help message and exit
 
-  --size SIZE
+  --size SIZE of the sliding window
 
 
