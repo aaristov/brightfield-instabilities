@@ -20,6 +20,9 @@ if __name__ == "__main__":
     two_files = io.select_two_images(fList)
     im0, im1 = io.read_images(*two_files)
     
-    out = cc.sliding_corr(im0, im1, size=size)
+    try:
+        out = cc.sliding_corr(im0, im1, size=size)
+    except KeyboardInterrupt:
+        print('User stop, exiting')
 
 
