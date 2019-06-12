@@ -29,7 +29,7 @@ This will compute correlation coefficient between two images and output correlat
 
 positional arguments:
 
-  folder
+  folders : you can put many -- data processed in parallel.
 
 optional arguments:
 
