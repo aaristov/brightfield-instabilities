@@ -25,6 +25,8 @@ Suppose you have a folder Pos1 with brightfield images save as individual tiffs.
 
 `python -m brightfield_instabilities path_to_Pos1`
 
+This will compute correlation coefficient between two images and output correlation map as 32-bit tif image `Pos1_brightfield_instabilities.tif`.
+
 positional arguments:
   folder
 
