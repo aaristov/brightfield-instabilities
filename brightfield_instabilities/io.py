@@ -13,13 +13,19 @@ def scan_folder(path, pattern='*.tif'):
     '''
     Returns a list of images
     '''
+    
+    flist = glob(path + os.path.sep + pattern)
+    print(f'Found {len(flist)} files')
     return glob(path + os.path.sep + pattern)
 
 def select_two_images(fileList:list):
-    return (fileList[0], fileList[-1])
+    sel = (fileList[0], fileList[-1])
+    print('Selected ', list(os.path.basename(p) for p in sel))
+    return sel
 
 def read_images(*paths, handler=open_tiff):
     '''
     reads every entry in file list
     '''
+    print('Reading ', list(os.path.basename(p) for p in paths))
     return (handler(p) for p in paths)
