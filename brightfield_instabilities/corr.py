@@ -54,9 +54,11 @@ def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False
     assert im0.ndim == 2
     assert smooth >= 0
 
-    print('Start processing')
+    print(f'Start processing with window size {size}')
+    print(f'Data shape: {im0.shape}')
     qy, qx = np.indices(im0.shape)
     out = np.zeros_like(im0, dtype=float)
+    
     if smooth:
         print(f'Smoothing with sigma {smooth}')
         im0 = gf(im0, smooth)
