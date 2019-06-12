@@ -9,6 +9,11 @@ def open_tiff(path:str) -> np.ndarray:
     '''
     return imageio.imread(path)
 
+def save_tiff(array:np.ndarray, path:str):
+    print(f'Saving tif file to {path}')
+    imageio.imsave(path, array, 'tiff')
+    return True
+
 def scan_folder(path, pattern='*.tif'):
     '''
     Returns a list of images

@@ -71,4 +71,4 @@ def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False
                 plot.multi_imshow(template, image, out)
                 print(fun(template, image))
 
-    return out
+    return out.astype(np.float32)
