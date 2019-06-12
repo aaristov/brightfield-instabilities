@@ -1,5 +1,5 @@
-# brightfield_instabilities
-Highlights local differences in brightfield tiff stack
+# Brightfield Instabilities
+Highlights local differences in brightfield images
 
 # Manual installation
 
