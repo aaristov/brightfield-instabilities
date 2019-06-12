@@ -1,7 +1,12 @@
 # Brightfield Instabilities
 Highlights local differences in brightfield images
 
-# Manual installation
+## Installing from Github
+
+`pip install git+https://github.com/aaristov/brightfield_instabilities.git`
+
+
+## Manual installation
 
 Use Python 3.7 or newer
 
@@ -15,11 +20,8 @@ To install into the system:
 
 `pip install .`
 
-# Installing from Github
 
-`pip install git+https://github.com/aaristov/brightfield_instabilities.git`
-
-# Usage
+## Usage
 
 Suppose you have a folder Pos1 with brightfield images save as individual tiffs.
 
@@ -35,6 +37,6 @@ optional arguments:
 
   -h, --help   show this help message and exit
 
-  --size SIZE
+  --size SIZE of the sliding window
 
 
