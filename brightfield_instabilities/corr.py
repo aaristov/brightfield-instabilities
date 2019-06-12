@@ -16,7 +16,7 @@ def corrcoef(*arr):
     Computes normalized correlation btween two images 
     
     '''
-    ravels = (t.ravel() for t in arr)
+    ravels = tuple(t.ravel() for t in arr)
     stack = np.vstack(ravels)
     return np.corrcoef(stack)[0, 1]
 
