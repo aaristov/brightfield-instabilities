@@ -1,5 +1,7 @@
 # Brightfield Instabilities
-Highlights local differences in brightfield images
+Highlights local differences in brightfield images.
+
+For slow tracking in bacteria (say, persistent motion) it's important to know that the cell did not move during fluorescent acquisition. For that purpose bright field images are acquired and saved periodically. We now can use this toolbox to highlight problematic regions in the colony.
 
 ## Installing from Github
 
@@ -28,6 +30,8 @@ Suppose you have a folder Pos1 with brightfield images save as individual tiffs.
 `python -m brightfield_instabilities path_to_Pos1`
 
 This will compute correlation coefficient between the first and the last image in the folder and output correlation map as 32-bit tif image `Pos1_brightfield_instabilities.tif`. 
+
+Correlation spans from -1 for no correlation to 1 for complete similarity. So the map with show dark spots in the places where the bacteria have moved or changed the shape. 
 
 It is recommended to remove the drift first. In Fiji you can use  Plugins › Registration › Register Virtual Stack Slices
 
