@@ -3,8 +3,6 @@ from scipy.ndimage import gaussian_filter as gf
 import brightfield_instabilities.plot as plot
 from tqdm.auto import tqdm
 
-
-
 def crop(data, corner_x, corner_y, size):
     '''
     Crops 2d array
