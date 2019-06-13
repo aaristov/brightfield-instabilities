@@ -10,7 +10,7 @@ Highlights local differences in brightfield images
 
 Use Python 3.7 or newer
 
-`git clone https://github.com/aaristov/brightfield_instabilities.git`
+`git clone https://github.com/aaristov/brightfield-instabilities.git`
 
 Go to brightfield-instabilities folder
 
