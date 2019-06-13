@@ -12,7 +12,7 @@ def process_folder(folderPath, size, smooth, filename=OUT_FILENAME):
     
     print(f'Processing folder {folderPath}')
 
-    assert os.path.isdir(folderPath)
+    assert os.path.isdir(folderPath), 'Not a folder!'
     assert isinstance(size, int)
     assert size > 1
     assert smooth >= 0
@@ -30,9 +30,11 @@ def process_folder(folderPath, size, smooth, filename=OUT_FILENAME):
     
     finally:    
         parentDir = os.path.dirname(folderPath)
-        fName = '_'.join([os.path.basename(folderPath), filename])
-        savePath = os.path.join(parentDir, fName)
-        io.save_tiff(out, savePath)
+        channels = ['corr', 'x', 'y']
+        for i, channel in enumerate(out):
+            fName = '_'.join([os.path.basename(folderPath), channels[i], filename])
+            savePath = os.path.join(parentDir, fName)
+            io.save_tiff(channel, savePath)
         # exit(0)
 
     return True

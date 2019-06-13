@@ -27,5 +27,9 @@ if __name__ == "__main__":
                 smooth=smooth,
                 size=int(size)
                 )
-    result = list(p.map(fun, folderPaths))
+    try:
+        result = list(map(fun, folderPaths))
+    except AssertionError as e:
+        print(*e.args, 'exiting')
+        exit(1)
     
