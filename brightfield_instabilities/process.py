@@ -28,6 +28,7 @@ def process_folder(
     two_files = io.select_two_images(fList)
     im0, im1 = io.read_images(*two_files)
     
+    out = []
     try:
         out = cc.sliding_corr(
             im0, 
@@ -44,10 +45,13 @@ def process_folder(
     finally:    
         parentDir = os.path.dirname(folderPath)
         channels = ['corr', 'x', 'y']
-        for i, channel in enumerate(out):
-            fName = '_'.join([os.path.basename(folderPath), channels[i], filename])
-            savePath = os.path.join(parentDir, fName)
-            io.save_tiff(channel, savePath)
+        if len(out):
+            for i, channel in enumerate(out):
+                fName = '_'.join([os.path.basename(folderPath), channels[i], filename])
+                savePath = os.path.join(parentDir, fName)
+                io.save_tiff(channel, savePath)
         # exit(0)
+        else:
+            print('Result is empty.')
 
     return True
