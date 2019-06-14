@@ -8,7 +8,14 @@ import os
 OUT_FILENAME = 'brightfield_instabilities.tif'
 
 
-def process_folder(folderPath, size, smooth, filename=OUT_FILENAME):
+def process_folder(
+    folderPath, 
+    size, 
+    smooth, 
+    max_shift,
+    cc_skip,
+    filename=OUT_FILENAME
+    ):
     
     print(f'Processing folder {folderPath}')
 
@@ -22,7 +29,13 @@ def process_folder(folderPath, size, smooth, filename=OUT_FILENAME):
     im0, im1 = io.read_images(*two_files)
     
     try:
-        out = cc.sliding_corr(im0, im1, size=size, smooth=smooth)
+        out = cc.sliding_corr(
+            im0, 
+            im1, 
+            size=size, 
+            smooth=smooth,
+            cc_skip=cc_skip,
+            max_shift=max_shift)
 
     except KeyboardInterrupt:
         print('User stop, exiting')
