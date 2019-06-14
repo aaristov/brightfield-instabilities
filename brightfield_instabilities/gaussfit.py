@@ -15,7 +15,14 @@ logger = logging.getLogger(__name__)
 
 sigma = 1.0
 
-
+def get_abs_max(data):
+    """
+    peaks up absolute maximum position in the stack/ 2D image
+    First dimension comes first
+    :param data: np.array
+    :return: abs max coordinates in data.shape format
+    """
+    return numpy.unravel_index(numpy.argmax(data), data.shape)
 
 def fitAFunctionLS(data, params, fn):
     """
@@ -232,8 +239,7 @@ def fitEllipticalGaussian(data):
     """
     params = [numpy.min(data),
               numpy.max(data),
-              0.5 * data.shape[0],
-              0.5 * data.shape[1],
+              *get_abs_max(data),
               4.0 / data.shape[0],
               0.0,
               4.0 / data.shape[1]]
