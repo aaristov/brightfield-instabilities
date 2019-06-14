@@ -25,7 +25,17 @@ def get_corrcoef(*arr):
     stack = np.vstack(ravels)
     return np.corrcoef(stack)[0, 1]
 
-def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False, fun=get_corrcoef, min_corr=0.5, smooth:float=0, cc_skip=10, max_shift=5):
+def sliding_corr(
+    im0:np.ndarray, 
+    im1:np.ndarray, 
+    size:int=40, 
+    verbose:bool=False, 
+    fun=get_corrcoef, 
+    min_corr=0.5, 
+    smooth:float=0, 
+    cc_skip=10, 
+    max_shift=5
+    ):
     '''
     Computes correlation coefficient between two two images using sliding window of size 'size'
     
