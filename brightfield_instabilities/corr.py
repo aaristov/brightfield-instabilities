@@ -41,10 +41,10 @@ def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False
         Function used to compute similarity of the fragments. get_corrcoef by default
     min_corr: float, < 1, optional
         minimal value of correlation to launch vector calculation. 0.5 by default.
-    
     smooth : float, optional
         Smotthing kernel sigma in pixels. If positive, smooth both images before processing. 
-
+    cc_skip : int, optional
+        Undersampling of cross-correlation xy shift. 10 by default
     Returns:
     -------
     out : 2d array of the same size as original images
@@ -62,6 +62,7 @@ def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False
     assert im0.ndim == 2
     assert smooth >= 0
     assert min_corr < 1.
+    assert cc_skip > 0 and isinstance(cc_skip, int) , 'cc_skip should be positive integer!'
 
     print(f'Start processing with window size {size}')
     print(f'Data shape: {im0.shape}')
@@ -92,13 +93,9 @@ def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False
                 xy_fit = fit_gauss_3d(cc,
                                     debug=False
                 )
-                try:
-                    x_cc, y_cc, _, good, _, _ = xy_fit
-                    
-                except ValueError as e:
-                    logging.error(f'Unable to unpack fit result {e}')
-                    # traceback.print_exc()
-                    return
+                
+                x_cc, y_cc, _, good, _, _ = xy_fit
+                # print(x_cc, y_cc)
                 if good:
                     r = cc_skip // 2
                     s = size // 2
@@ -233,7 +230,7 @@ def fit_gauss_3d(img: np.ndarray,
     # x_found = x - r + x_px
     # y_found = y - r + y_px
     x_found = x - x_max / 2
-    y_found = x - y_max / 2
+    y_found = y - y_max / 2
     logger.debug(f'xy found: {np.round((x_found, y_found),2)}')
 
     
