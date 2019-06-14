@@ -70,12 +70,13 @@ def sliding_corr(
     
     '''
 
-    assert im0.shape == im1.shape, 'Image shapes are different'
-    assert im0.ndim == 2, f'Bad dimentionality {im0.ndim}, expected 2'
-    assert smooth >= 0, f'Smooth must not be negative, got {smooth}'
-    assert min_corr < 1. and min_corr > 0, f'Min_corr must be from 0 to 1, got {min_corr}'
+    assert im0.shape == im1.shape, f'image shapes are different {im0.shape, im1.shape}, check your stack'
+    assert size > 8, f'size is too small, expected at least 8, got {size}'
+    assert im0.ndim == 2, f'bad dimentionality {im0.ndim}, expected 2'
+    assert smooth >= 0, f'smooth must not be negative, got {smooth}'
+    assert min_corr < 1. and min_corr > 0, f'min_corr must be from 0 to 1, got {min_corr}'
     assert cc_skip > 0 and isinstance(cc_skip, int) , f'cc_skip should be positive integer, got {cc_skip}'
-    assert max_shift > 0 and max_shift < size / 3 , f'Max_shift can to exceed 1 / 3 * size {1 / 3 * size}, got {max_shift}'
+    assert max_shift > 0 and max_shift < size / 3 , f'max_shift can not exceed 1 / 3 * size = {1 / 3 * size:.1f}, got {max_shift}'
     
     print(f'Start processing with window size {size}')
     print(f'Data shape: {im0.shape}')
@@ -103,19 +104,17 @@ def sliding_corr(
                 crop_t = max_shift
                 template_crop = template[crop_t:-crop_t, crop_t:-crop_t]
                 cc = cc_template(image, template_crop, verbose=False)
-                xy_fit = fit_gauss_3d(cc,
-                                    debug=True
-                )
                 
-                x_cc, y_cc, _, good, _, _ = xy_fit
-                # print(x_cc, y_cc)
-                if good:
-                    r = cc_skip // 2
-                    s = size // 2
-                    _yrange = y + s - r ,  y + s + r
-                    _xrange = x + s - r ,  x + s + r
-                    vectorMap[1, _yrange[0] : _yrange[1] , _xrange[0] : _xrange[1]] = x_cc
-                    vectorMap[2, _yrange[0] : _yrange[1] , _xrange[0] : _xrange[1]] = y_cc
+                y_cc, x_cc = get_abs_max(cc)
+                x_cc = x_cc - crop_t
+                y_cc = y_cc - crop_t
+
+                r = cc_skip // 2
+                s = size // 2
+                _yrange = y + s - r ,  y + s + r
+                _xrange = x + s - r ,  x + s + r
+                vectorMap[1, _yrange[0] : _yrange[1] , _xrange[0] : _xrange[1]] = x_cc
+                vectorMap[2, _yrange[0] : _yrange[1] , _xrange[0] : _xrange[1]] = y_cc
 
     return vectorMap.astype(np.float32)
 
