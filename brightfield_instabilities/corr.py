@@ -25,7 +25,7 @@ def get_corrcoef(*arr):
     stack = np.vstack(ravels)
     return np.corrcoef(stack)[0, 1]
 
-def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False, fun=get_corrcoef, min_corr=0.5, smooth:float=0, cc_skip=10):
+def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False, fun=get_corrcoef, min_corr=0.5, smooth:float=0, cc_skip=10, max_shift=5):
     '''
     Computes correlation coefficient between two two images using sliding window of size 'size'
     
@@ -45,6 +45,8 @@ def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False
         Smotthing kernel sigma in pixels. If positive, smooth both images before processing. 
     cc_skip : int, optional
         Undersampling of cross-correlation xy shift. 10 by default
+    max_shift: int, optional
+        Maximum shift in pixels. 5 by default
     Returns:
     -------
     out : 2d array of the same size as original images
@@ -58,12 +60,13 @@ def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False
     
     '''
 
-    assert im0.shape == im1.shape
-    assert im0.ndim == 2
-    assert smooth >= 0
-    assert min_corr < 1.
-    assert cc_skip > 0 and isinstance(cc_skip, int) , 'cc_skip should be positive integer!'
-
+    assert im0.shape == im1.shape, 'Image shapes are different'
+    assert im0.ndim == 2, f'Bad dimentionality {im0.ndim}, expected 2'
+    assert smooth >= 0, f'Smooth must not be negative, got {smooth}'
+    assert min_corr < 1. and min_corr > 0, f'Min_corr must be from 0 to 1, got {min_corr}'
+    assert cc_skip > 0 and isinstance(cc_skip, int) , f'cc_skip should be positive integer, got {cc_skip}'
+    assert max_shift > 0 and max_shift < size / 3 , f'Max_shift can to exceed 1 / 3 * size {1 / 3 * size}, got {max_shift}'
+    
     print(f'Start processing with window size {size}')
     print(f'Data shape: {im0.shape}')
     qy, qx = np.indices(im0.shape)
@@ -87,11 +90,11 @@ def sliding_corr(im0:np.ndarray, im1:np.ndarray, size:int=40, verbose:bool=False
                 print(corrCoef)
             
             if corrCoef > min_corr and x % cc_skip == 0 and y % cc_skip == 0:
-                crop_t = 5
+                crop_t = max_shift
                 template_crop = template[crop_t:-crop_t, crop_t:-crop_t]
                 cc = cc_template(image, template_crop, verbose=False)
                 xy_fit = fit_gauss_3d(cc,
-                                    debug=False
+                                    debug=True
                 )
                 
                 x_cc, y_cc, _, good, _, _ = xy_fit
@@ -231,7 +234,7 @@ def fit_gauss_3d(img: np.ndarray,
     # y_found = y - r + y_px
     x_found = x - x_max / 2
     y_found = y - y_max / 2
-    logger.debug(f'xy found: {np.round((x_found, y_found),2)}')
+    logger.debug(f'xy found: {x_found:.2f} , {y_found:.2f}')
 
     
     logger.debug(f'raw xy {np.round((x, y),2)}')
