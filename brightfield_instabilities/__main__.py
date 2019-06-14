@@ -37,6 +37,7 @@ if __name__ == "__main__":
     try:
         result = list(map(fun, folderPaths))
     except AssertionError as e:
-        print(*e.args, 'exiting')
+        for msg in e.args:
+            print(f'Bad arguments: {msg}, exiting')
         exit(1)
     
