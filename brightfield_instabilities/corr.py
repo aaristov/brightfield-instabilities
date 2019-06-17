@@ -100,7 +100,7 @@ def sliding_corr(
                 plot.multi_imshow(template, image, corrMap)
                 print(corrCoef)
             
-            if corrCoef > min_corr and x % cc_skip == 0 and y % cc_skip == 0:
+            if False:#corrCoef > min_corr and x % cc_skip == 0 and y % cc_skip == 0:
                 crop_t = max_shift
                 template_crop = template[crop_t:-crop_t, crop_t:-crop_t]
                 cc = cc_template(image, template_crop, verbose=False)
