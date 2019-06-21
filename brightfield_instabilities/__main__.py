@@ -16,15 +16,19 @@ if __name__ == "__main__":
     parser.add_argument('--smooth', type=float, default=0, help='Apply gaussian blur with sigma = smooth. Float, 0 by default')
     parser.add_argument('--cc-skip', type=float, default=10, help='Downsample shift map, 10 by default')
     parser.add_argument('--max-shift', type=float, default=5, help='Maximum shift in pixels, 5 by default')
+    parser.add_argument('--frame-skip', type=int, default=-1, help='Number of frames to skip. -1 by default, \
+        meaning only first and last frames will be correlated (same for 0). 1 mean every frame, 2 every second etc.')
 
     args = parser.parse_args()
-    print(args)
+    # print(args)
 
     folderPaths = args.folders
     size = int(args.size)
     smooth = args.smooth
     cc_skip = int(args.cc_skip)
     max_shift = int(args.max_shift)
+    skip_frames = int(args.frame_skip)
+
 
     p = Pool(cpu_count())
     fun = partial(
@@ -32,10 +36,11 @@ if __name__ == "__main__":
                 smooth=smooth,
                 size=size,
                 cc_skip=cc_skip,
-                max_shift=max_shift
+                max_shift=max_shift,
+                skip_frames=skip_frames
                 )
     try:
-        result = list(map(fun, folderPaths))
+        result = list(p.map(fun, folderPaths))
     except AssertionError as e:
         for msg in e.args:
             print(f'Bad arguments: {msg}, exiting')
