@@ -52,14 +52,15 @@ def read_images(*paths, handler=open_tiff):
 
 def create_subfolder(current_path, folder_name):
     '''
-    Creates a folder inside current folder.
+    Creates a folder inside current_folder if id does not already exist.
+
     Returns 
         the new subfolder path
     Raises
         IOError, AssertionError if folder has not be created
     '''
     assert os.path.isdir(current_path)
-    desired_path = os.path.join([current_path, folder_name])
+    desired_path = os.path.join(current_path, folder_name)
     if not os.path.isdir(desired_path):
         try:
             os.mkdir(desired_path)
@@ -69,5 +70,7 @@ def create_subfolder(current_path, folder_name):
         except IOError as e:
             print(f'IOError, {e.args}')
             raise e
+    else:
+        return desired_path
     
 
