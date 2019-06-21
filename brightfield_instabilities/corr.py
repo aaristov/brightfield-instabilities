@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-def crop(data, corner_x, corner_y, size):
+def get_crop(data, corner_x, corner_y, size):
     '''
     Crops 2d array
     Outputs size*size crop
@@ -91,8 +91,8 @@ def sliding_corr(
         im1 = gf(im1, smooth)
         
     for x, y in tqdm(list(zip(np.ravel(qx), np.ravel(qy)))):
-        template = crop(im0, x, y, size)
-        image = crop(im1, x, y, size)
+        template = get_crop(im0, x, y, size)
+        image = get_crop(im1, x, y, size)
         if template.shape == (size, size) and image.shape == (size, size):
             corrCoef = get_corrcoef(image, template)
             vectorMap[0, y+size//2, x+size//2] = corrCoef
