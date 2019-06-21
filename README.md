@@ -1,7 +1,7 @@
 # Brightfield Instabilities
 Highlights local differences in brightfield images.
 
-For slow tracking in bacteria (say, persistent motion) it's important to know that the cell did not move during fluorescent acquisition. For that purpose bright field images are acquired and saved periodically. We now can use this toolbox to highlight problematic regions in the colony.
+For slow tracking in bacteria (say, persistent motion) it's important to know that the cell did not move during fluorescent acquisition. For that purpose bright field images are acquired and saved periodically. We now can use this toolbox to highlight problematic regions in the colony and quantify local displacements.
 
 ## Installing from Github
 
@@ -10,7 +10,7 @@ For slow tracking in bacteria (say, persistent motion) it's important to know th
 
 ## Manual installation
 
-Use Python 3.7 or newer
+Use Python 3.7 or newer (conda virtual environment is recommended)
 
 `git clone https://github.com/aaristov/brightfield-instabilities.git`
 
