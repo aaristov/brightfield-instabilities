@@ -9,12 +9,24 @@ from matplotlib import pyplot as plt
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+class BadSize(Exception):
+    pass
+
+
 def get_crop(data, corner_x, corner_y, size):
     '''
     Crops 2d array
     Outputs size*size crop
+    Raises BadSize if output shape is not (shape, shape)
     '''
-    return data[corner_y:corner_y+size, corner_x:corner_x+size]
+    shape = data.shape
+    crop = data[corner_y:corner_y+size, corner_x:corner_x+size]
+
+    if crop.shape == (size, size):
+        return crop
+    else:
+        raise BadSize(f'wrong crop shape {crop.shape}, expected {(size, size)}')
+
 
 def get_corrcoef(*arr):
     '''
@@ -81,6 +93,9 @@ def sliding_corr(
     print(f'Start processing with window size {size}')
     print(f'Data shape: {im0.shape}')
     qy, qx = np.indices(im0.shape)
+    qy = qy[::cc_skip, ::cc_skip]
+    qx = qx[::cc_skip, ::cc_skip]
+    
     corrMap = np.zeros_like(im0, dtype=float)
     vectorMap = np.stack((corrMap, corrMap, corrMap), axis=0)
     print(f'vectorMap shape: {vectorMap.shape}')
@@ -91,30 +106,37 @@ def sliding_corr(
         im1 = gf(im1, smooth)
         
     for x, y in tqdm(list(zip(np.ravel(qx), np.ravel(qy)))):
-        template = get_crop(im0, x, y, size)
-        image = get_crop(im1, x, y, size)
-        if template.shape == (size, size) and image.shape == (size, size):
-            corrCoef = get_corrcoef(image, template)
-            vectorMap[0, y+size//2, x+size//2] = corrCoef
+        try:
+            template = get_crop(im0, x, y, size)
+            image = get_crop(im1, x, y, size)
+        
+            template_crop = template[max_shift:-max_shift, max_shift:-max_shift]
+            xcorr_result = get_xcorr(image, template_crop, verbose=False)
+                
+            corrCoef = xcorr_result[max_shift, max_shift]
+
             if verbose:
                 plot.multi_imshow(template, image, corrMap)
                 print(corrCoef)
             
-            if False:#corrCoef > min_corr and x % cc_skip == 0 and y % cc_skip == 0:
-                crop_t = max_shift
-                template_crop = template[crop_t:-crop_t, crop_t:-crop_t]
-                cc = get_xcorr(image, template_crop, verbose=False)
+            # if corrCoef > min_corr and x % cc_skip == 0 and y % cc_skip == 0:
                 
-                y_cc, x_cc = get_abs_max(cc)
-                x_cc = x_cc - crop_t
-                y_cc = y_cc - crop_t
+            y_cc, x_cc = get_abs_max(xcorr_result)
+            x_cc = x_cc - max_shift
+            y_cc = y_cc - max_shift
 
-                r = cc_skip // 2
-                s = size // 2
-                _yrange = y + s - r ,  y + s + r
-                _xrange = x + s - r ,  x + s + r
-                vectorMap[1, _yrange[0] : _yrange[1] , _xrange[0] : _xrange[1]] = x_cc
-                vectorMap[2, _yrange[0] : _yrange[1] , _xrange[0] : _xrange[1]] = y_cc
+            r1 = cc_skip // 2
+            r2 = cc_skip - r1
+            s = size // 2
+            _yrange = y + s - r1 ,  y + s + r2
+            _xrange = x + s - r1 ,  x + s + r2
+
+            vectorMap[0, _yrange[0] : _yrange[1] , _xrange[0] : _xrange[1]] = corrCoef
+            vectorMap[1, _yrange[0] : _yrange[1] , _xrange[0] : _xrange[1]] = x_cc
+            vectorMap[2, _yrange[0] : _yrange[1] , _xrange[0] : _xrange[1]] = y_cc
+        
+        except BadSize:
+            continue
 
     return vectorMap.astype(np.float32)
 
