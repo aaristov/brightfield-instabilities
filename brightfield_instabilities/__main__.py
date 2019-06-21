@@ -30,7 +30,7 @@ if __name__ == "__main__":
     skip_frames = int(args.frame_skip)
 
 
-    p = Pool(cpu_count())
+    # p = Pool(cpu_count())
     fun = partial(
                 process_folder,
                 smooth=smooth,
@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 skip_frames=skip_frames
                 )
     try:
-        result = list(p.map(fun, folderPaths))
+        result = list(map(fun, folderPaths))
     except AssertionError as e:
         for msg in e.args:
             print(f'Bad arguments: {msg}, exiting')
