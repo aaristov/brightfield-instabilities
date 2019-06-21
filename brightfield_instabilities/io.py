@@ -43,4 +43,5 @@ def read_images(*paths, handler=open_tiff):
     reads every entry in file list
     '''
     print('Reading ', list(os.path.basename(p) for p in paths))
-    return (handler(p) for p in paths)
+    for p in paths:
+        yield handler(p)
