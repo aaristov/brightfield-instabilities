@@ -19,7 +19,6 @@ def get_crop(data, corner_x, corner_y, size):
     Outputs size*size crop
     Raises BadSize if output shape is not (shape, shape)
     '''
-    shape = data.shape
     crop = data[corner_y:corner_y+size, corner_x:corner_x+size]
 
     if crop.shape == (size, size):
