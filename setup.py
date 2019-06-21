@@ -11,5 +11,5 @@ setup(name='brightfield_instabilities',
       author_email='aaristov@pasteur.fr',
       url='https://github.com/aaristov/brightfield-instabilities',
       packages=['brightfield_instabilities'],
-      requires=['numpy', 'scipy', 'imageio', 'tqdm']
+      install_requires=['numpy', 'scipy', 'imageio', 'tqdm']
      )
