@@ -37,8 +37,7 @@ def get_corrcoef(*arr):
     return np.corrcoef(stack)[0, 1]
 
 def sliding_corr(
-    im0:np.ndarray, 
-    im1:np.ndarray, 
+    image_pair:tuple,
     size:int=40, 
     verbose:bool=False, 
     fun=get_corrcoef, 
@@ -81,6 +80,7 @@ def sliding_corr(
     
     '''
 
+    im0, im1 = image_pair
     assert im0.shape == im1.shape, f'image shapes are different {im0.shape, im1.shape}, check your stack'
     assert size > 8, f'size is too small, expected at least 8, got {size}'
     assert im0.ndim == 2, f'bad dimentionality {im0.ndim}, expected 2'
