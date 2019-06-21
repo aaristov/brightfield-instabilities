@@ -54,7 +54,7 @@ Full command line help:
 >python -m brightfield_instabilities -h
 
 Bright Field Instabilities v0.4.0
-usage: __main__.py [-h] [--size SIZE] [--smooth SMOOTH] [--cc-skip CC_SKIP]
+usage: __main__.py [-h] [--size SIZE] [--cc-skip CC_SKIP] [--smooth SMOOTH]
                    [--max-shift MAX_SHIFT] [--frame-skip FRAME_SKIP]
                    [folders [folders ...]]
 
@@ -63,15 +63,15 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --size SIZE           Window size, px. Integer, 32 by default.
+  --size SIZE           Sliding window size, px. Integer, 32 by default.
+  --cc-skip CC_SKIP     Sliding window step, 5 by default
   --smooth SMOOTH       Apply gaussian blur with sigma = smooth. Float, 1.5 by
                         default
-  --cc-skip CC_SKIP     Downsample shift map, 5 by default
   --max-shift MAX_SHIFT
                         Maximum shift in pixels, 5 by default
   --frame-skip FRAME_SKIP
                         Number of frames to skip. -1 by default, meaning only
                         first and last frames will be correlated (same for 0).
-                        1 means every frame, 2 every second etc.
+                        1 means every frame, 2 - every second etc.
 ```
 
