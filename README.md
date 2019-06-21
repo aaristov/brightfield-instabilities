@@ -33,22 +33,31 @@ This will compute correlation coefficient between the first and the last image i
 
 Correlation spans from -1 for no correlation to 1 for complete similarity. So the map with show dark spots in the places where the bacteria have moved or changed the shape. 
 
+For E.coli colony the good parameters are
+
+`python -m brightfield_instabilities PATH_TO_FOLDER  --smooth=1.5 --size=32 --max-shift=5 --cc-skip=5`
+
 It is recommended to remove the drift first. In Fiji you can use  Plugins › Registration › Register Virtual Stack Slices
 
 ```
 >python -m brightfield_instabilities -h
 
-Bright Field Instabilities v0.1.3
-usage: __main__.py [-h] [--size SIZE] [--smooth SMOOTH]
+Bright Field Instabilities v0.3.0
+usage: __main__.py [-h] [--size SIZE] [--smooth SMOOTH] [--cc-skip CC_SKIP]
+                   [--max-shift MAX_SHIFT]
                    [folders [folders ...]]
 
 positional arguments:
-  folders          Folders' paths to process
+  folders               Folders' paths to process
 
 optional arguments:
-  -h, --help       show this help message and exit
-  --size SIZE      Window size, px. Integer, 40 by default.
-  --smooth SMOOTH  Apply gaussian blur with sigma = smooth. Float, 0 by
-                   default
+  -h, --help            show this help message and exit
+  --size SIZE           Window size, px. Integer, 40 by default.
+  --smooth SMOOTH       Apply gaussian blur with sigma = smooth. Float, 0 by
+                        default
+  --cc-skip CC_SKIP     Downsample shift map, 10 by default
+  --max-shift MAX_SHIFT
+                        Maximum shift in pixels, 5 by default
+
 ```
 
