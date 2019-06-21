@@ -103,7 +103,7 @@ def sliding_corr(
             if False:#corrCoef > min_corr and x % cc_skip == 0 and y % cc_skip == 0:
                 crop_t = max_shift
                 template_crop = template[crop_t:-crop_t, crop_t:-crop_t]
-                cc = cc_template(image, template_crop, verbose=False)
+                cc = get_xcorr(image, template_crop, verbose=False)
                 
                 y_cc, x_cc = get_abs_max(cc)
                 x_cc = x_cc - crop_t
