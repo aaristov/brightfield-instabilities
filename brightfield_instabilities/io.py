@@ -28,6 +28,16 @@ def select_two_images(fileList:list):
     print('Selected ', list(os.path.basename(p) for p in sel))
     return sel
 
+def select_multi_images(fileList:list, skip:int=-1):
+    sel = [fileList[0]]
+    if skip <= 0:
+        sel.append(fileList[-1])
+    else:
+        for i in fileList[::skip]:
+            sel.append(i)
+    print('Selected ', list(os.path.basename(p) for p in sel))
+    return sel
+
 def read_images(*paths, handler=open_tiff):
     '''
     reads every entry in file list
