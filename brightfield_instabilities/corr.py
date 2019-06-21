@@ -155,7 +155,7 @@ def get_abs_max(data):
     return np.unravel_index(np.argmax(data), data.shape)
 
 
-def cc_template(image, template, verbose=False):
+def get_xcorr(image, template, verbose=False):
     try:
         cc = match_template(image, template, pad_input=False)
         if verbose:
