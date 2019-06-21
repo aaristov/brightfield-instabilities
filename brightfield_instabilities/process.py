@@ -7,6 +7,8 @@ import os
 from functools import partial
 from multiprocessing import Pool, cpu_count
 
+from brightfield_instabilities.picassoio import load_movie
+
 
 OUT_FILENAME = 'brightfield_instabilities.tif'
 FOLDER_SUFFIX = 'brightfield_instabilities'
@@ -56,7 +58,7 @@ def process_pairwise_loop(
     
 
 def process_folder(
-    folderPath, 
+    path, 
     size, 
     smooth, 
     max_shift,
@@ -64,35 +66,39 @@ def process_folder(
     skip_frames=-1,
     filename=OUT_FILENAME
     ):
-    
-    print(f'Processing folder {folderPath}')
-
-    assert os.path.isdir(folderPath), 'Not a folder!'
     assert isinstance(size, int)
     assert size > 1
     assert smooth >= 0
 
-    fList = io.scan_folder(folderPath)
-    selected_paths = io.select_multi_images(fList, skip=skip_frames)
-    
-    n_files = len(selected_paths)
-    assert n_files > 1, 'File sequence too short'
-    if n_files == 2:
-        out = process_pairwise_loop(
-            selected_paths,
-            size, 
-            smooth, 
-            max_shift,
-            cc_skip)
-    else:
-        out = process_pairwise_pool(
-            selected_paths,
-            size, 
-            smooth, 
-            max_shift,
-            cc_skip)
+    print(f'Processing {path}')
 
-    save_correlation_results(folderPath, out)
+    if os.path.isdir(path):
+    
+        fList = io.scan_folder(path)
+        selected_paths = io.select_multi_images(fList, skip=skip_frames)
+        
+        n_files = len(selected_paths)
+        assert n_files > 1, 'File sequence too short'
+        if n_files == 2:
+            out = process_pairwise_loop(
+                selected_paths,
+                size, 
+                smooth, 
+                max_shift,
+                cc_skip)
+        else:
+            out = process_pairwise_pool(
+                selected_paths,
+                size, 
+                smooth, 
+                max_shift,
+                cc_skip)
+
+    elif os.path.isfile(path) and path.index('ome.tif'):
+        movie, [info] = load_movie(path)
+        # to be continued
+
+    save_correlation_results(path, out)
 
     return True
 

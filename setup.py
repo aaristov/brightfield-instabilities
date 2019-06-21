@@ -17,5 +17,6 @@ setup(name='brightfield_instabilities',
             'scikit-image', 
             'imageio', 
             'tqdm', 
-            'matplotlib']
+            'matplotlib',
+            'pyyaml']
      )

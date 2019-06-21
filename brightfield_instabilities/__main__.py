@@ -11,7 +11,7 @@ if __name__ == "__main__":
     print(f'Bright Field Instabilities v{__version__}')
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("folders", nargs='*', help='Folders\' paths to process')
+    parser.add_argument("path", nargs='*', help='Folders with tif files or ome.tif files to process')
     parser.add_argument('--size', type=int, default=32, help='Sliding window size, px. Integer, 32 by default.')
     parser.add_argument('--cc-skip', type=float, default=5, help='Sliding window step, 5 by default')
     parser.add_argument('--smooth', type=float, default=1.5, help='Apply gaussian blur with sigma = smooth. Float, 1.5 by default')
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # print(args)
 
-    folderPaths = args.folders
+    paths = args.path
     size = int(args.size)
     smooth = args.smooth
     cc_skip = int(args.cc_skip)
@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 skip_frames=skip_frames
                 )
     try:
-        result = list(map(fun, folderPaths))
+        result = list(map(fun, paths))
     except AssertionError as e:
         for msg in e.args:
             print(f'Bad arguments: {msg}, exiting')
